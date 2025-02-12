@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析结果</title>
+    <link rel="stylesheet" href="../css/analyze.css">
+</head>
+<body>
+    <div class="container">
+        <h2>分析结果</h2>
+
+        <!-- 上传信息展示 -->
+        <div id="uploadSummary">
+            <h3>上传方式：</h3>
+            <p id="uploadMethod">未检测到上传</p>
+            <h3>上传内容：</h3>
+            <ul id="uploadedFilesList"></ul> <!-- 展示文件列表 -->
+        </div>
+
+        <!-- 分析结果 -->
+        <div id="analysisResult">
+            <h3>分析结果</h3>
+            <p id="summaryText">分析中...</p>
+        </div>
+
+        <button id="backBtn">返回</button>
+    </div>
+
+    <script>
+        // 获取存储的上传信息
+        document.addEventListener("DOMContentLoaded", function () {
+            const uploadMethod = localStorage.getItem("uploadMethod") || "无";
+            const uploadedFiles = JSON.parse(localStorage.getItem("uploadedFiles")) || [];
+
+            // 设置上传方式
+            document.getElementById("uploadMethod").textContent = uploadMethod;
+
+            // 显示上传的文件
+            const fileListElement = document.getElementById("uploadedFilesList");
+            uploadedFiles.forEach(file => {
+                const listItem = document.createElement("li");
+                listItem.textContent = file;
+                fileListElement.appendChild(listItem);
+            });
+
+            // 获取大模型分析结果
+            const analysisResult = localStorage.getItem("analysisResult") || "暂无分析数据";
+            document.getElementById("summaryText").textContent = analysisResult;
+        });
+
+        // 返回上一页
+        document.getElementById("backBtn").addEventListener("click", () => {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>

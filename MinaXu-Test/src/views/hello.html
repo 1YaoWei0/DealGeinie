@@ -1,29 +1,278 @@
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="/static/styles/custom.css" />
-    <script
-      src="https://res.cdn.office.net/teams-js/2.22.0/js/MicrosoftTeams.min.js"
-      integrity="sha384-WSG/sWulIv7rel5TnFlH8JTpxl2OxzZh9Lux2mIzBFiTRLFvMBeFv9VURu/3vQdx"
-      crossorigin="anonymous"
-    ></script>
-    <script src="/static/scripts/teamsapp.js"></script>
-    <title>Microsoft Teams Tab</title>
-  </head>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传与录音</title>
+    <link rel="stylesheet" href="../css/upload.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>方式1 - 录音</h2>
+        <div class="recording-box">
+            <p id="timer">00:00:00</p>
+            <button id="recordBtn">▶</button>
+            <p id="transcript"></p> <!-- 显示转换的文本 -->
+        </div>
+        
+        <h2>方式2 - 上传沟通文件</h2>
+        <div class="upload-box">
+            <p>可上传 Word、TXT、MP3、MP4 及 PDF 文件，最多可上传 3 个文件</p>
+            <input type="file" id="fileInput" multiple>
+            <button id="uploadBtn">上传</button>
+        </div>
 
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div>
-      <h1>Hello, World</h1>
-      <span>
-        <p>Your app is running</p>
-        <p id="hubState"></p>
-      </span>
+        
+        <div id="fileList"></div><!-- 显示上传的文件 -->
+        <p id="transFileScript"></p> <!-- 显示转换的文本 -->
+
+        <input type="text" id="companyName" placeholder="请输入客户公司名称">
+        <button id="analyzeBtn">开始分析</button>
     </div>
-    <script type="text/javascript">
-      microsoftTeams.appInitialization.notifySuccess();
-    </script>
-  </body>
+
+    <script>
+              let mediaRecorder;
+    let audioChunks = [];
+let recognition;
+let timerInterval;
+let seconds = 0;
+
+const timerElement = document.getElementById("timer");
+const transcriptElement = document.getElementById("transcript");
+const transFileScriptElement = document.getElementById("transFileScript");
+
+const recordButton = document.getElementById("recordBtn");
+      
+      // 启动录音
+async function startRecording() {
+    // 获取麦克风权限
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+
+    // 录音数据可用时存储
+    mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+    };
+
+    // 录音停止时处理音频
+    mediaRecorder.onstop = () => {
+        clearInterval(timerInterval); // 停止计时
+        seconds = 0;
+        timerElement.textContent = "00:00:00"; // 重置计时器
+    };
+
+    mediaRecorder.start();
+    startTimer();
+    recordButton.textContent = "■";
+
+    // 启动语音识别
+    startSpeechRecognition();
+}
+
+// 停止录音
+function stopRecording() {
+    mediaRecorder.stop();
+    recordButton.textContent = "▶";
+
+    // 结束语音识别
+    if (recognition) {
+        recognition.stop();
+    }
+}
+
+// 计时器函数
+function startTimer() {
+    seconds = 0;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        seconds++;
+        let hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
+        let mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+        let secs = String(seconds % 60).padStart(2, "0");
+        timerElement.textContent = `${hrs}:${mins}:${secs}`;
+    }, 1000);
+}
+
+// 语音识别函数
+function startSpeechRecognition() {
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!window.SpeechRecognition) {
+        transcriptElement.textContent = "您的浏览器不支持语音识别";
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.continuous = true; // 持续识别
+    recognition.interimResults = true; // 显示实时结果
+    recognition.lang = "zh-CN"; // 设置语言
+
+    recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = 0; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+        }
+        transcriptElement.textContent = transcript; // 实时更新文本
+    };
+
+    recognition.start();
+}
+
+// 绑定按钮点击事件
+recordButton.addEventListener("click", () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        startRecording();
+    } else {
+        stopRecording();
+    }
+});
+
+const fileInput = document.getElementById("fileInput");
+const uploadButton = document.getElementById("uploadBtn");
+const fileList = document.getElementById("fileList");
+
+const MAX_FILES = 3;
+let uploadedFiles = [];
+
+// 监听上传按钮
+uploadButton.addEventListener("click", () => {
+    const files = fileInput.files;
+    if (files.length === 0) {
+        alert("请选择要上传的文件！");
+        return;
+    }
+
+    if (uploadedFiles.length + files.length > MAX_FILES) {
+        alert(`最多只能上传 ${MAX_FILES} 个文件`);
+        return;
+    }
+
+    for (const file of files) {
+        if (uploadedFiles.length >= MAX_FILES) break;
+        // **检查是否已存在相同文件**
+        if (uploadedFiles.some(uploadedFile => uploadedFile.name === file.name)) {
+            alert(`文件 "${file.name}" 已经上传过了！`);
+            continue;
+        }
+        
+        uploadedFiles.push(file);  // 确保文件存入数组
+        displayFile(file); // 立即更新 UI
+        processFile(file);
+    }
+
+    updateFileList();  // 更新文件列表
+});
+// 显示已上传文件列表
+function displayFile(file) {
+    const fileItem = document.createElement("div");
+    fileItem.classList.add("file-item");
+    fileItem.innerHTML = `
+        📄 ${file.name} <button onclick="removeFile('${file.name}')">❌</button>
+    `;
+    fileList.appendChild(fileItem);
+}
+
+// 移除文件
+function removeFile(fileName) {
+    uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+    updateFileList();
+}
+
+function updateFileList() {
+    fileList.innerHTML = ""; // 先清空
+    uploadedFiles.forEach(file => displayFile(file)); // 重新渲染
+}
+
+// 解析文件内容
+function processFile(file) {
+    const reader = new FileReader();
+
+    // 处理文本文件（TXT、Word）
+    if (file.type.includes("text") || file.name.endsWith(".txt")) {
+        reader.onload = () => {
+            transFileScriptElement.textContent += `📄 ${file.name} 内容:\n${reader.result}\n\n`;
+        };
+        reader.readAsText(file);
+    }
+
+    // 处理 PDF 文件
+    else if (file.name.endsWith(".pdf")) {
+        reader.onload = async () => {
+            const pdfData = new Uint8Array(reader.result);
+            const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+            let text = "";
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const content = await page.getTextContent();
+                text += content.items.map(item => item.str).join(" ") + "\n";
+            }
+            transFileScriptElement.textContent += `📄 ${file.name} 内容:\n${text}\n\n`;
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    // 处理 MP3/MP4 音视频文件（集成 Web Speech API）
+    else if (file.type.includes("audio") || file.type.includes("video")) {
+        const url = URL.createObjectURL(file);
+        const audio = new Audio(url);
+        audio.play();
+
+        const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = "zh-CN";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        recognition.onresult = (event) => {
+            let transcript = "";
+            for (let i = 0; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            transFileScriptElement.textContent += `🎙 ${file.name} 转写:\n${transcript}\n\n`;
+        };
+
+        recognition.start();
+
+        audio.onended = () => {
+            recognition.stop();
+            URL.revokeObjectURL(url);
+        };
+    }
+
+    // 处理不支持的文件格式
+    else {
+        transcriptElement.textContent += `❌ ${file.name} 无法解析\n\n`;
+    }
+}
+
+document.getElementById("analyzeBtn").addEventListener("click", async () => {
+    const companyName = document.getElementById("companyName").value;
+    if (!companyName) {
+        alert("请输入客户公司名称！");
+        return;
+    }
+
+    // 获取上传方式
+    const uploadMethod = uploadedFiles.length > 0 ? "文件上传" : "录音";
+    localStorage.setItem("uploadMethod", uploadMethod);
+
+    // 存储已上传的文件
+    const fileNames = uploadedFiles.map(file => file.name);
+    localStorage.setItem("uploadedFiles", JSON.stringify(fileNames));
+
+    // 假设调用大模型 API 获取分析结果
+    const analysisResult = `
+        公司名称:${companyName}
+        客户名称:颜总、强总、Jason、Jocke
+        跟进状态:跟进中有需求有预算
+        进展总结:本次沟通主要围绕业务流程调整、物料编码规则变更、开发需求变更以及款项管理计划展开...
+    `;
+    localStorage.setItem("analysisResult", analysisResult);
+
+    // 跳转到分析结果界面
+    window.location.href = "gpt.html";
+});
+  </script>
+</body>
 </html>
+

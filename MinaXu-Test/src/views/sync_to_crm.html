@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>接收并显示 JSON 数据</title>
+</head>
+<body>
+
+    <h1>接收并同步到 CRM</h1>
+
+    <div>
+        <strong>公司名称：</strong> <span id="companyNameField"></span>
+    </div>
+    <div>
+        <strong>客户名称：</strong> <span id="customerNameField"></span>
+    </div>
+    <div>
+        <strong>跟进状态：</strong> <span id="statusField"></span>
+    </div>
+    <div>
+        <strong>进展总结：</strong> <span id="progressSummaryField"></span>
+    </div>
+    <div>
+        <strong>结论总结：</strong> <span id="conclusionSummaryField"></span>
+    </div>
+    <div>
+        <strong>待办总结：</strong> <span id="todoSummaryField"></span>
+    </div>
+    <div>
+        <strong>下一步沟通建议：</strong> <span id="nextStepsField"></span>
+    </div>
+
+<script>
+// 从 URL 参数中获取 jsonData
+const urlParams = new URLSearchParams(window.location.search);
+const jsonData = JSON.parse(decodeURIComponent(urlParams.get('jsonData')));
+
+// 渲染 JSON 数据到页面
+document.getElementById('companyNameField').textContent = jsonData["公司名称"];
+document.getElementById('customerNameField').textContent = jsonData["客户名称"];
+document.getElementById('statusField').textContent = jsonData["跟进状态"];
+document.getElementById('progressSummaryField').textContent = jsonData["进展总结"];
+document.getElementById('conclusionSummaryField').textContent = jsonData["结论总结"];
+document.getElementById('todoSummaryField').textContent = jsonData["待办总结"];
+document.getElementById('nextStepsField').textContent = jsonData["下一步沟通建议"].join("；");
+</script>
+
+</body>
+</html>

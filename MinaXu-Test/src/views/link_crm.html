@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamics CRM OrganizationService 性能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        button {
+            background-color: #0078D4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #005A9E;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dynamics CRM 组织服务性能测试</h1>
+
+    <button onclick="testWebAPI()">测试 Web API</button>
+    <button onclick="testOrganizationService()">测试 OrganizationService</button>
+
+    <div class="result" id="webApiResult"></div>
+    <div class="result" id="orgServiceResult"></div>
+
+    <script>
+        // CRM 相关配置
+        const CRM_URL = "https://crmdev.huamei.com"; // 你的CRM地址
+        const API_VERSION = "v9.0"; // 你的CRM API版本
+
+        // =================== Web API 测试 ===================
+        async function testWebAPI() {
+            const startTime = performance.now();
+            document.getElementById("webApiResult").innerText = "Web API 请求中...";
+
+            try {
+                const response = await fetch(`${CRM_URL}/api/data/${API_VERSION}/accounts`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + await getAccessToken(), // 需要获取 Access Token
+                        "Accept": "application/json"
+                    }
+                });
+
+                if (!response.ok) throw new Error("Web API 请求失败");
+
+                const data = await response.json();
+                const endTime = performance.now();
+                document.getElementById("webApiResult").innerText =
+                    `Web API 请求成功，耗时: ${(endTime - startTime).toFixed(2)}ms`;
+                console.log("Web API 数据:", data);
+            } catch (error) {
+                document.getElementById("webApiResult").innerText = `Web API 失败: ${error.message}`;
+                console.error(error);
+            }
+        }
+
+        // =================== OrganizationService 测试（SOAP） ===================
+        async function testOrganizationService() {
+            const startTime = performance.now();
+            document.getElementById("orgServiceResult").innerText = "OrganizationService 请求中...";
+
+        }
+    </script>
+
+</body>
+</html>
