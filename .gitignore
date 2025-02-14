@@ -3,6 +3,8 @@ InboundCrmIntegration/packages
 InboundCrmIntegration/InboundCrmIntegration/.vs
 InboundCrmIntegration/InboundCrmIntegration/bin
 InboundCrmIntegration/InboundCrmIntegration/obj
+InboundCrmIntegration/DealGeinieCrmService/bin
+InboundCrmIntegration/DealGeinieCrmService/obj
 
 # TeamsFx files
 MinaXu-Test/env/.env.*.user
