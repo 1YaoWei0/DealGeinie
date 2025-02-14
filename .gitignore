@@ -1,0 +1,27 @@
+InboundCrmIntegration/.vs
+InboundCrmIntegration/packages
+InboundCrmIntegration/InboundCrmIntegration/.vs
+InboundCrmIntegration/InboundCrmIntegration/bin
+InboundCrmIntegration/InboundCrmIntegration/obj
+
+# TeamsFx files
+MinaXu-Test/env/.env.*.user
+MinaXu-Test/env/.env.local
+MinaXu-Test/.DS_Store
+MinaXu-Test/.localConfigs
+MinaXu-Test/build
+MinaXu-Test/appPackage/build
+
+# dependencies
+MinaXu-Test/node_modules
+
+# testing
+MinaXu-Test/coverage
+
+# production
+MinaXu-Test/build
+
+# misc
+MinaXu-Test/.DS_Store
+MinaXu-Test/.env
+MinaXu-Test/.deployment
