@@ -125,10 +125,12 @@
   <ItemGroup>
     <Compile Include="CrmAccount.cs" />
     <Compile Include="CrmAccountService.cs" />
+    <Compile Include="Entities\CrmOpportunity.cs" />
     <Compile Include="ICrmCredential.cs" />
     <Compile Include="ICrmEntity.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CrmAnnotationService.cs" />
     <Compile Include="TestAccountCredential.cs" />
   </ItemGroup>
   <ItemGroup>
