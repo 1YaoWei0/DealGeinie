@@ -3,48 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>接收并显示 JSON 数据</title>
+    <title>CRM 数据同步</title>
+    <link rel="stylesheet" href="../css/sync_to_crm.css">
 </head>
 <body>
 
-    <h1>接收并同步到 CRM</h1>
-
-    <div>
-        <strong>公司名称：</strong> <span id="companyNameField"></span>
-    </div>
-    <div>
-        <strong>客户名称：</strong> <span id="customerNameField"></span>
-    </div>
-    <div>
-        <strong>跟进状态：</strong> <span id="statusField"></span>
-    </div>
-    <div>
-        <strong>进展总结：</strong> <span id="progressSummaryField"></span>
-    </div>
-    <div>
-        <strong>结论总结：</strong> <span id="conclusionSummaryField"></span>
-    </div>
-    <div>
-        <strong>待办总结：</strong> <span id="todoSummaryField"></span>
-    </div>
-    <div>
-        <strong>下一步沟通建议：</strong> <span id="nextStepsField"></span>
+    <h2>CRM 数据同步</h2>
+    
+    <div class="info-box">
+        <h3>企业信息</h3>
+        <p><strong>公司名称：</strong> <span id="company-name"></span></p>
+        <p><strong>客户名称：</strong> <span id="customer-name"></span></p>
+        <p><strong>跟进状态：</strong> <span id="follow-status"></span></p>
+        <p><strong>进展总结：</strong></p>
+        <p id="progress-summary"></p>
+        <p><strong>结论总结：</strong></p>
+        <p id="conclusion-summary"></p>
+        <p><strong>待办总结：</strong></p>
+        <p id="todo-summary"></p>
+        <p><strong>下一步沟通建议：</strong></p>
+        <ul id="next-steps"></ul>
     </div>
 
-<script>
-// 从 URL 参数中获取 jsonData
-const urlParams = new URLSearchParams(window.location.search);
-const jsonData = JSON.parse(decodeURIComponent(urlParams.get('jsonData')));
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const jsonDataString = localStorage.getItem("jsonData");
+          if (jsonDataString) {
+              const jsonData = JSON.parse(jsonDataString);
+              console.log("获取到的 JSON 数据:", jsonData);
 
-// 渲染 JSON 数据到页面
-document.getElementById('companyNameField').textContent = jsonData["公司名称"];
-document.getElementById('customerNameField').textContent = jsonData["客户名称"];
-document.getElementById('statusField').textContent = jsonData["跟进状态"];
-document.getElementById('progressSummaryField').textContent = jsonData["进展总结"];
-document.getElementById('conclusionSummaryField').textContent = jsonData["结论总结"];
-document.getElementById('todoSummaryField').textContent = jsonData["待办总结"];
-document.getElementById('nextStepsField').textContent = jsonData["下一步沟通建议"].join("；");
-</script>
+              document.getElementById("company-name").textContent = jsonData["公司名称"];
+              document.getElementById("customer-name").textContent = jsonData["客户名称"];
+              document.getElementById("follow-status").textContent = jsonData["跟进状态"];
+              document.getElementById("progress-summary").textContent = jsonData["进展总结"];
+              document.getElementById("conclusion-summary").textContent = jsonData["结论总结"];
+              document.getElementById("todo-summary").textContent = jsonData["待办总结"];
+
+              const nextStepsList = document.getElementById("next-steps");
+              jsonData["下一步沟通建议"].forEach(step => {
+                  const li = document.createElement("li");
+                  li.textContent = step;
+                  nextStepsList.appendChild(li);
+              });
+          } else {
+              console.warn("⚠️ 未找到 jsonData，可能是 localStorage 为空");
+          }
+      });
+    </script>
 
 </body>
 </html>

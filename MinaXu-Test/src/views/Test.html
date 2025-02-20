@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams 选项卡应用 - 获取 Access Token</title>
+    <!-- <script src="https://res.cdn.office.net/teams-js/2.17.0/js/MicrosoftTeams.min.js"></script>
+    <script src="https://alcdn.msauth.net/browser/2.29.0/js/msal-browser.min.js"></script>
+    <script src="https://res.cdn.office.net/teams-js/2.17.0/js/MicrosoftTeams.min.js"></script> -->
+    <!-- Microsoft Teams JavaScript API (via CDN) -->
+<!-- <script rc="https://res.cdn.office.net/teams-js/2.34.0/js/MicrosoftTeams.min.js" integrity="sha384-brW9AazbKR2dYw2DucGgWCCcmrm2oBFV4HQidyuyZRI/TnAkmOOnTARSTdps3Hwt" crossorigin="anonymous"></script> -->
+<!-- Microsoft Teams JavaScript API (via npm) -->
+<!-- <script src="node_modules/@microsoft/teams-js@2.34.0/dist/MicrosoftTeams.min.js"></script> -->
+
+<!-- Microsoft Teams JavaScript API (via local) -->
+<!-- <script src="MicrosoftTeams.min.js"></script> -->
+<script src="https://res.cdn.office.net/teams-js/2.34.0/js/MicrosoftTeams.min.js"></script>
+
+</head>
+<body>
+    <h2>Microsoft Teams - SSO 认证 Demo</h2>
+    <button onclick="getTeamsToken()">获取 Teams Token</button>
+    <p id="result"></p>
+
+    <script>
+        // 1️⃣ 初始化 Teams SDK
+        microsoftTeams.app.initialize().then(() => {
+            console.log("Teams SDK 初始化成功");
+        });
+
+        if (!microsoftTeams.app.isInitialized()) {
+    console.error("此页面未在 Microsoft Teams 中运行！");
+    document.getElementById("result").innerText = "此页面必须嵌入在 Microsoft Teams 选项卡内";
+}
+
+        // 2️⃣ 获取 Auth Token
+        function getTeamsToken() {
+            microsoftTeams.authentication.getAuthToken({
+                successCallback: (token) => {
+                    console.log("获取 Teams Token 成功:", token);
+                    document.getElementById("result").innerText = `Teams Token: ${token}`;
+                },
+                failureCallback: (error) => {
+                    console.error("获取 Teams Token 失败:", error);
+                    document.getElementById("result").innerText = "获取 Teams Token 失败";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

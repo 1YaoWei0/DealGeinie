@@ -1,78 +1,129 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FastGPT 大模型调用</title>
-    <script src="../js/jpt.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>沟通分析结果</title>
+        <!-- <link rel="stylesheet" href="../css/gpt.css"> -->
+    </head>
 <body>
-    
-    <h1>分析结果</h1>
-    <input type="text" id="userInput" placeholder="输入你的问题">
-    <button onclick="sendMessage()">发送</button>
-    
-    <p><strong>回复：</strong> <span id="response"></span></p>
-    
-    <button id="syncButton">同步</button>，
-
     <style>
-        #syncButton {
-          background-color: #007bff; /* 蓝色背景 */
-          color: white; /* 白色字体 */
-          font-size: 16px; /* 字体大小 */
-          padding: 10px 20px; /* 内边距，使按钮看起来更大 */
-          border-radius: 25px; /* 圆角 */
-          border: none; /* 去掉默认的边框 */
-          cursor: pointer; /* 鼠标悬停时显示手指图标 */
-          transition: background-color 0.3s ease; /* 平滑的背景色过渡 */
-        }
-      
-        /* 鼠标悬停时改变背景色 */
-        #syncButton:hover {
-          background-color: #0056b3; /* 悬停时变为深蓝色 */
-        }
-      
-        /* 点击按钮时的效果 */
-        #syncButton:active {
-          background-color: #003f7f; /* 点击时变为更深的蓝色 */
-        }
-      
-        /* 按钮在不同屏幕下自适应 */
-        @media (max-width: 600px) {
-          #syncButton {
-            width: 100%; /* 小屏幕时让按钮占满整个宽度 */
-          }
-        }
-      </style>
+/* 全局样式 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* 主容器 */
+.container {
+    width: 350px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info-box {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+h2, h3 {
+    color: #333;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+ul li {
+    background: #dfe3e8;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+button:hover {
+    background: #357ABD;
+}
+    </style>
+    <div class="container">
+        <h2>沟通分析结果</h2>
+        
+        <div class="info-box">
+            <h3>沟通内容</h3>
+            <ul id="communication-content"></ul>
+        </div>
+        
+        <div class="info-box">
+            <h3>分析结果</h3>
+            <p><strong>公司名称：</strong> <span id="company-name"></span></p>
+            <p><strong>客户名称：</strong> <span id="customer-name"></span></p>
+            <p><strong>跟进状态：</strong> <span id="follow-status"></span></p>
+            <p><strong>进展总结：</strong></p>
+            <p id="progress-summary"></p>
+            <p><strong>结论总结：</strong></p>
+            <p id="conclusion-summary"></p>
+            <p><strong>待办总结：</strong></p>
+            <p id="todo-summary"></p>
+            <p><strong>下一步沟通建议：</strong></p>
+            <ul id="next-steps"></ul>
+        </div>
+        
+        <div class="info-box">
+            <h3>企业信息</h3>
+            <p><strong>公司名称：</strong> <span id="company-name"></span></p>
+            <p><strong>统一社会信用代码：</strong> <span id="business-license"></span></p>
+            <p><strong>经营范围：</strong> <span id="business-scope"></span></p>
+        </div>
+        
+        <button id="sync-crm">同步CRM</button>
+    </div>
       
 <script>
 
-// 今天我与上海普嫌包装制品有限公司的顾总、强总进行了沟通。他们目前在跟进系统切换的需求，并有明确的预算。我们讨论了业务流程调整、物料编码规则变更以及数据整理计划。客户表示理解，并已经安排人员测试数据。最终客户同意在12月6日前提供第一轮数据，并确认开发需求的冻结时间。我们计划下周进行现场培训，并对数据收集模板进行讲解。待办事项包括：客户需要确认业务需求文档，并安排现场培训，同时继续与银行沟通银企直连接口问题。建议下一步确保现场培训顺利进行，重点讲解数据模板，并跟进客户确认业务文档，同时持续关注银企直连接口的进展。
-    async function sendMessage() {
-        const input = document.getElementById("userInput").value;
+window.onload = function () {    
+    const transcriptElement = localStorage.getItem("transcriptElement");
+    console.log(transcriptElement);
 
-        if (!input.trim()) {
-            alert("请输入问题！");
-            return;
-        }
+    const jsonData = {};
 
-        document.getElementById("response").textContent = "正在生成回复...";
-
-        try {
-            const reply = await callFastGPT(input);
-            console.log("reply:", reply);
-            document.getElementById("response").textContent = reply || "未获取到回复";
-        } catch (error) {
-            console.error("❌ 发生错误:", error);
-            document.getElementById("response").textContent = "请求失败，请检查控制台";
-        }
+    // prompt = "今天我与上海普嫌包装制品有限公司的顾总、强总进行了沟通。他们目前在跟进系统切换的需求，并有明确的预算。我们讨论了业务流程调整、物料编码规则变更以及数据整理计划。客户表示理解，并已经安排人员测试数据。最终客户同意在12月6日前提供第一轮数据，并确认开发需求的冻结时间。我们计划下周进行现场培训，并对数据收集模板进行讲解。待办事项包括：客户需要确认业务需求文档，并安排现场培训，同时继续与银行沟通银企直连接口问题。建议下一步确保现场培训顺利进行，重点讲解数据模板，并跟进客户确认业务文档，同时持续关注银企直连接口的进展。";
+    //const apiKey = "huamei-ERTaZXvYuDQesusqaw2WGexoRwAy0GLPpscVS2YqOLFIk2r3UXSfo"; // DealGenie
+    const apiKey = "huamei-LpEZihtnKVtjKCmF6CbP8s9azxwPmUaxNInBBTiXBOkX8uptDLB1HdRjdl3Ra967V";//DealGenie-AI
+    
+    const apiUrl = "https://ai.huameisoft.cn/api/v1/chat/completions";
+    // 今天我与上海普嫌包装制品有限公司的顾总、强总进行了沟通。他们目前在跟进系统切换的需求，并有明确的预算。我们讨论了业务流程调整、物料编码规则变更以及数据整理计划。客户表示理解，并已经安排人员测试数据。最终客户同意在12月6日前提供第一轮数据，并确认开发需求的冻结时间。我们计划下周进行现场培训，并对数据收集模板进行讲解。待办事项包括：客户需要确认业务需求文档，并安排现场培训，同时继续与银行沟通银企直连接口问题。建议下一步确保现场培训顺利进行，重点讲解数据模板，并跟进客户确认业务文档，同时持续关注银企直连接口的进展。
+    try {
+            const reply = callFastGPTSummary(transcriptElement);
+            console.log("内容总结:", reply);            
+    } catch (error) {
+            console.error("❌ 发生错误:", error);        
     }
 
-    async function callFastGPT(prompt) {
-    const apiKey = "huamei-ERTaZXvYuDQesusqaw2WGexoRwAy0GLPpscVS2YqOLFIk2r3UXSfo"; // 你的 FastGPT API Key
-    const apiUrl = "https://ai.huameisoft.cn/api/v1/chat/completions";
-
+    try {
+            const reply = callFastGPTCompany(document.getElementById("company-name").textContent);
+            console.log("公司简介:", reply);            
+    } catch (error) {
+            console.error("❌ 发生错误:", error);        
+    }
+    
+    async function callFastGPTSummary(prompt) {
     const requestBody = {
         chatId: "my_chatId",
         stream: false,
@@ -85,7 +136,72 @@
         messages: [
             {
                 role: "user",
-                content: `请基于我的输入内容【${prompt}】进行解析，并返回符合下述 JSON 结构的内容请仅返回 **纯 JSON**，不要包含 Markdown 代码块（如 \`\`\`json ）。只返回一个json json
+                content: `请基于我的输入内容【${prompt}】进行解析，并返回符合下述 JSON 结构的内容请仅返回 **纯 JSON**，不要包含 Markdown 代码块（如 \`\`\`json ）。请确保你的回复是 **单个 JSON 对象**，不能包含多个 JSON。 json
+                        {
+                        "公司名称": "公司名称",
+                        "统一社会信用代码": "统一社会信用代码",
+                        "经营范围": "经营范围",
+                        }` // 传入的 prompt 替换 content
+            }
+        ]
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            throw new Error(`请求失败: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // 提取 "content" 值
+        const content = data.choices[0].message.content;       
+                
+        const match = content.match(/\{[\s\S]*?\}/);
+
+        let jsonData = {};
+        if (match) {
+            jsonData = JSON.parse(match[0]); // 只解析第一个 JSON
+            console.log("解析后的 JSON:", jsonData);
+        } else {
+            console.error("未找到有效的 JSON");
+        }
+
+        document.getElementById("company-name").textContent = jsonData["公司名称"];
+        document.getElementById("business-license").textContent = jsonData["统一社会信用代码"];
+        document.getElementById("business-scope").textContent = jsonData["经营范围"];
+
+        return content;
+
+    } catch (error) {
+        console.error("❌ FastGPT 请求失败:", error);
+        return "请求失败";
+    }    
+
+    }
+
+    async function callFastGPTCompany(prompt) {
+    const requestBody = {
+        chatId: "my_chatId",
+        stream: false,
+        detail: false,
+        responseChatItemId: "my_responseChatItemId",
+        variables: {
+            uid: "asdfadsfasfd2323",
+            name: "张三"
+        },
+        messages: [
+            {
+                role: "user",
+                content: `请基于我输入的公司名称【${prompt}】进行解析，并返回符合下述 JSON 结构的内容请仅返回 **纯 JSON**，不要包含 Markdown 代码块（如 \`\`\`json ）。请确保你的回复是 **单个 JSON 对象**，不能包含多个 JSON。 json
                         {
                         "公司名称": "公司名称",
                         "客户名称": "客户联系人，多人用逗号隔开",
@@ -118,33 +234,57 @@
         }
 
         const data = await response.json();
-        console.log("FastGPT 回复:", data);
 
         // 提取 "content" 值
-        // const content = data.choices[0].message.content;
-
-        const content = '{"公司名称": "上海普嫌包装制品有限公司","客户名称": "顾总, 强总","跟进状态": "跟进中有需求有预算","进展总结": "讨论了业务流程调整、物料编码规则变更以及数据整理计划，客户已安排人员测试数据。","结论总结": "客户同意在12月6日前提供第一轮数据，并确认开发需求的冻结时间。","待办总结": "客户需要确认业务需求文档，安排现场培训，并继续与银行沟通银企直连接口问题。","下一步沟通建议": ["确保现场培训顺利进行","重点讲解数据模板","跟进客户确认业务文档，并持续关注银企直连接口的进展"]}'
+        const content = data.choices[0].message.content;
                 
-        const jsonData = JSON.parse(content);
+        const match = content.match(/\{[\s\S]*?\}/);
+
+        let jsonData = {};
+        if (match) {
+            jsonData = JSON.parse(match[0]); // 只解析第一个 JSON
+            console.log("解析后的 JSON:", jsonData);
+        } else {
+            console.error("未找到有效的 JSON");
+        }
+
+        document.getElementById("company-name").textContent = jsonData["公司名称"];
+        document.getElementById("customer-name").textContent = jsonData["客户名称"];
+        document.getElementById("follow-status").textContent = jsonData["跟进状态"];
+        document.getElementById("progress-summary").textContent = jsonData["进展总结"];
+        document.getElementById("conclusion-summary").textContent = jsonData["结论总结"];
+        document.getElementById("todo-summary").textContent = jsonData["待办总结"];
+
+        const nextStepsList = document.getElementById("next-steps");
+
+        if (jsonData && Array.isArray(jsonData["下一步沟通建议"])) {
+            jsonData["下一步沟通建议"].forEach(step => {
+                const li = document.createElement("li");
+                li.textContent = step;
+                nextStepsList.appendChild(li);
+            });
+        } else {
+            console.error("下一步沟通建议不存在或不是数组:", jsonData["下一步沟通建议"]);
+        }
 
         // 存储 jsonData 到 localStorage
         localStorage.setItem("jsonData", JSON.stringify(jsonData));
 
-    // 访问 JSON 数据
-    console.log("公司名称:", jsonData["公司名称"]);
-    console.log("客户名称:", jsonData["客户名称"]);
-    console.log("跟进状态:", jsonData["跟进状态"]);
-    console.log("进展总结:", jsonData["进展总结"]);
-    console.log("结论总结:", jsonData["结论总结"]);
-    console.log("待办总结:", jsonData["待办总结"]);
-    console.log("下一步沟通建议:", jsonData["下一步沟通建议"].join("；"));
         return content;
 
     } catch (error) {
         console.error("❌ FastGPT 请求失败:", error);
         return "请求失败";
     }    
+
 }
+};
+
+document.getElementById("sync-crm").addEventListener("click", async () => {
+    localStorage.setItem("jsonData", JSON.stringify(jsonData));
+    // 跳转到分析结果界面
+    window.location.href = "sync_to_crm.html";
+});
 
 // 请基于我的输入内容【今天我与上海普嫌包装制品有限公司的顾总、强总进行了沟通。他们目前在跟进系统切换的需求，并有明确的预算。我们讨论了业务流程调整、物料编码规则变更以及数据整理计划。客户表示理解，并已经安排人员测试数据。最终客户同意在12月6日前提供第一轮数据，并确认开发需求的冻结时间。我们计划下周进行现场培训，并对数据收集模板进行讲解。待办事项包括：客户需要确认业务需求文档，并安排现场培训，同时继续与银行沟通银企直连接口问题。建议下一步确保现场培训顺利进行，重点讲解数据模板，并跟进客户确认业务文档，同时持续关注银企直连接口的进展。】进行解析，并返回符合上述 JSON 结构的内容。
 // json
@@ -162,14 +302,6 @@
 // ]
 // }
 
-// 点击 "同步" 按钮时的操作
-document.getElementById("syncButton").onclick = function() {
-    // 获取存储的 jsonData
-    const jsonData = JSON.parse(localStorage.getItem("jsonData"));
-    // 将 jsonData 序列化为 URL 参数并跳转到接收界面
-    const encodedJsonData = encodeURIComponent(JSON.stringify(jsonData));
-    window.location.href = `sync_to_crm.html?jsonData=${encodedJsonData}`;
-};
 </script>
 
 </body>
