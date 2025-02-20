@@ -3,26 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM 数据同步</title>
+    <title>同步 CRM</title>
     <link rel="stylesheet" href="../css/sync_to_crm.css">
 </head>
 <body>
 
-    <h2>CRM 数据同步</h2>
-    
-    <div class="info-box">
-        <h3>企业信息</h3>
-        <p><strong>公司名称：</strong> <span id="company-name"></span></p>
-        <p><strong>客户名称：</strong> <span id="customer-name"></span></p>
-        <p><strong>跟进状态：</strong> <span id="follow-status"></span></p>
-        <p><strong>进展总结：</strong></p>
-        <p id="progress-summary"></p>
-        <p><strong>结论总结：</strong></p>
-        <p id="conclusion-summary"></p>
-        <p><strong>待办总结：</strong></p>
-        <p id="todo-summary"></p>
-        <p><strong>下一步沟通建议：</strong></p>
-        <ul id="next-steps"></ul>
+    <div class="container">
+        <h2>同步CRM</h2>
+
+        <form id="crmForm">
+            <div class="input-group">
+                <label for="company-name">公司名称</label>
+                <input type="text" id="company-name" placeholder="请输入公司名称">
+            </div>
+
+            <div class="input-group">
+                <label for="meeting-date">沟通时间</label>
+                <input type="date" id="meeting-date" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="customer-name">客户名称</label>
+                <input type="text" id="customer-name" placeholder="请输入客户名称">
+            </div>
+
+            <div class="input-group">
+                <label for="business-needs">跟进业务</label>
+                <input type="text" id="business-needs" placeholder="请输入跟进业务">
+            </div>
+
+            <div class="input-group">
+                <label for="progress-summary">进展总结</label>
+                <textarea id="progress-summary" placeholder="请输入进展总结"></textarea>
+            </div>
+
+            <button type="submit">同步</button>
+        </form>
     </div>
 
     <script>
@@ -48,6 +64,15 @@
           } else {
               console.warn("⚠️ 未找到 jsonData，可能是 localStorage 为空");
           }
+
+          // 获取当前时间并格式化为 YYYY/MM/DD
+        let now = new Date();
+        let formattedDate = now.getFullYear() + "/" +
+            String(now.getMonth() + 1).padStart(2, '0') + "/" +
+            String(now.getDate()).padStart(2, '0');
+
+        // 设置表单中的时间值
+        document.getElementById("meeting-date").value = formattedDate;
       });
     </script>
 

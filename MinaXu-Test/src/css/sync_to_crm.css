@@ -1,0 +1,87 @@
+/* 🌟 全局基础样式 */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f8fa;
+    margin: 0;
+}
+
+/* 🌟 外层容器，确保整体居中 */
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%; /* ✅ 适应不同屏幕 */
+    max-width: 380px; /* ✅ 限制最大宽度 */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 🌟 标题样式 */
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 🌟 输入框组（确保左右对齐） */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+/* 🌟 输入框的 label */
+.input-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+/* 🌟 输入框 & 文本区域，确保左右对齐 */
+.input-group input,
+.input-group textarea {
+    width: 100%; /* ✅ 宽度填充容器 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* ✅ 让 padding 不影响整体宽度 */
+}
+
+/* 🌟 让输入框在聚焦时更明显 */
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: #007aff;
+    outline: none;
+    background-color: #fff;
+}
+
+/* 🌟 文本区域 */
+.input-group textarea {
+    resize: none;
+    height: 60px;
+}
+
+/* 🌟 提交按钮，确保与输入框宽度对齐 */
+button {
+    width: 100%; /* ✅ 让按钮与输入框对齐 */
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007aff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #005ecb;
+}
