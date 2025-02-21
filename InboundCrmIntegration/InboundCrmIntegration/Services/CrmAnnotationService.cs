@@ -21,19 +21,26 @@ namespace InboundCrmIntegration.Services
             crmCredential = _crmCredential;
         }
 
-        public void AddNoteToOpportunity(IOrganizationService service, Guid opportunityId, string noteText, string title = "")
+        public void AddNoteToOpportunity(IOrganizationService service, Guid accountid, string noteText, string title = "")
         {
             Entity note = new Entity("annotation");
 
-            // 设置注释的内容
-            note["annotationid"] = noteText;
-
-            // 设置关联的商机ID
-            note["objectid"] = new EntityReference("opportunity", opportunityId);
-
-            note["subject"] = title;
-
+            //// 设置注释的内容
+            //note["annotationid"] = noteText;
+            //note["isdocument"] = false;
+            //// 设置关联的商机ID
+            //note["subject"] = title;
+            //note["objectid"] = new EntityReference("account", new Guid("e9161bbf-5ae8-ef11-811f-00155d01060d"));            
             // 创建注释
+            
+            string entitytype = "account";
+            Entity Note = new Entity("annotation");
+            Guid EntityToAttachTo = Guid.Parse("e9161bbf-5ae8-ef11-811f-00155d01060d"); // The GUID of the incident
+            Note["objectid"] = new Microsoft.Xrm.Sdk.EntityReference(entitytype, EntityToAttachTo);
+            Note["objecttypecode"] = entitytype;
+            Note["subject"] = "Test Subject";
+            Note["notetext"] = "Test note text";
+            service.Create(Note);
             Guid noteId = service.Create(note);
 
             Console.WriteLine("注释已创建，ID: " + noteId.ToString());
@@ -54,9 +61,9 @@ namespace InboundCrmIntegration.Services
 
             IOrganizationService organizationServiceProxy = new OrganizationServiceProxy(new Uri(testAccountCredential.Uri), null, testAccountCredential.Credentials(), null);
 
-            QueryExpression query = new QueryExpression("opportunity");
-            query.ColumnSet.AddColumns("name", "opportunityid");
-            query.Criteria.AddCondition("name", ConditionOperator.Equal, "测试");
+            QueryExpression query = new QueryExpression("account");
+            query.ColumnSet.AddColumns("name", "accountid");
+            query.Criteria.AddCondition("name", ConditionOperator.Equal, "尧威");
 
 
             // 执行查询
@@ -65,9 +72,9 @@ namespace InboundCrmIntegration.Services
             // 检查结果并获取ID
             if (result.Entities.Count > 0)
             {
-                Guid opportunityId = result.Entities[0].Id;
+                Guid accountid = result.Entities[0].Id;
 
-                AddNoteToOpportunity(organizationServiceProxy, opportunityId, "TEST CONTENT", "TEST TITLE");
+                AddNoteToOpportunity(organizationServiceProxy, accountid, "TEST CONTENT", "TEST TITLE");
 
             }
             else
