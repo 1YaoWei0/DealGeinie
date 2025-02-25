@@ -5,10 +5,12 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InboundCrmIntegration
+namespace DealGeinieCrmService.Authentications
 {
     public interface ICrmCredential
     {
         ClientCredentials Credentials();
+
+        void InitializeCredentials();
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InboundCrmIntegration
+namespace DealGeinieCrmService.Models
 {
     public class ICrmEntity
     {

@@ -5,7 +5,7 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InboundCrmIntegration
+namespace DealGeinieCrmService.Authentications
 {
     public class TestAccountCredential : ICrmCredential
     {
@@ -38,6 +38,11 @@ namespace InboundCrmIntegration
             clientCredentials.UserName.Password = Password;
 
             return clientCredentials;
+        }
+
+        public void InitializeCredentials()
+        {
+            throw new NotImplementedException();
         }
     }
 }

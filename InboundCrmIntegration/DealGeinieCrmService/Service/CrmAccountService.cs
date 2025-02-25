@@ -8,8 +8,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
+using DealGeinieCrmService.Authentications;
+using DealGeinieCrmService.Models;
 
-namespace InboundCrmIntegration
+namespace DealGeinieCrmService.Services
 {
     public class CrmAccountService
     {
@@ -24,7 +26,7 @@ namespace InboundCrmIntegration
 
         public bool UpdateAccount()
         {
-            CrmAccount crmAccount = (CrmAccount) crmEntity;
+            CrmAccountEntity crmAccount = (CrmAccountEntity) crmEntity;
             TestAccountCredential testAccountCredential = (TestAccountCredential) crmCredential;
 
             ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
@@ -43,7 +45,8 @@ namespace InboundCrmIntegration
                 Guid entityId = organizationServiceProxy.Create(entityCreate);
             }
             catch (Exception ex)
-            {                
+            {
+                var error = ex.Message;
                 return false;
             }            
 
