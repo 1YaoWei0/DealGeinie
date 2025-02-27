@@ -1,0 +1,25 @@
+2025-02-26 17:28:14.332 [main] INFO  com.assistants.assistantsapi.AssistantsApiApplication - Starting AssistantsApiApplication using Java 1.8.0_441 on Mina-PC with PID 23840 (D:\ideaprojects\assistants_api\target\classes started by Administrator in D:\ideaprojects\assistants_api)
+2025-02-26 17:28:14.342 [main] INFO  com.assistants.assistantsapi.AssistantsApiApplication - The following 1 profile is active: "dev"
+2025-02-26 17:28:15.472 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-02-26 17:28:15.473 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-02-26 17:28:15.473 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.69]
+2025-02-26 17:28:15.729 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-02-26 17:28:16.546 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-02-26 17:28:16.572 [main] INFO  com.assistants.assistantsapi.AssistantsApiApplication - Started AssistantsApiApplication in 2.823 seconds (JVM running for 4.304)
+2025-02-26 17:28:26.572 [http-nio-8080-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-26 17:28:26.624 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - remoteAddr:0:0:0:0:0:0:0:1
+2025-02-26 17:28:26.626 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:host,value:localhost:8080
+2025-02-26 17:28:26.626 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:connection,value:keep-alive
+2025-02-26 17:28:26.626 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-ch-ua,value:"Not(A:Brand";v="99", "Microsoft Edge";v="133", "Chromium";v="133"
+2025-02-26 17:28:26.626 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-ch-ua-mobile,value:?0
+2025-02-26 17:28:26.629 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-ch-ua-platform,value:"Windows"
+2025-02-26 17:28:26.629 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:upgrade-insecure-requests,value:1
+2025-02-26 17:28:26.630 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:user-agent,value:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-02-26 17:28:26.630 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:accept,value:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+2025-02-26 17:28:26.631 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-fetch-site,value:none
+2025-02-26 17:28:26.631 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-fetch-mode,value:navigate
+2025-02-26 17:28:26.631 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-fetch-user,value:?1
+2025-02-26 17:28:26.631 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:sec-fetch-dest,value:document
+2025-02-26 17:28:26.632 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:accept-encoding,value:gzip, deflate, br, zstd
+2025-02-26 17:28:26.632 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.interceptor.AccessLimtInterceptor - name:accept-language,value:zh-CN,zh;q=0.9
+2025-02-26 17:28:26.656 [http-nio-8080-exec-2] INFO  com.assistants.assistantsapi.controller.AzureAdController - 请求授权
