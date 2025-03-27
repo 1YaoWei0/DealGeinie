@@ -17,7 +17,7 @@ namespace DealGeinieCrmService.Controllers
     {
         [Route("{id}")]
         [HttpPost]
-        public async Task<IHttpActionResult> SyncOpportunityDataAsync(CrmOpportunityEntity _crmOpportunityEntity)
+        public IHttpActionResult SyncOpportunityData(CrmOpportunityEntity _crmOpportunityEntity)
         {
             CrmOpportunityService crmOpportunityService = new CrmOpportunityService();
 
