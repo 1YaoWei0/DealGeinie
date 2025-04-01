@@ -1,10 +1,7 @@
-﻿using DealGeinieCrmService.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DealGeinieCrmService.Base;
+using System.IdentityModel.Protocols.WSTrust;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using Status = DealGeinieCrmService.Base.Status;
 
 namespace DealGeinieCrmService.Models
 {
@@ -12,8 +9,28 @@ namespace DealGeinieCrmService.Models
     /// Represents a CRM opportunity entity.
     /// Willie Yao - 02/20/2025
     /// </summary>
-    [DataContract]
-    public class CrmOpportunityEntity : ICrmEntity
+    public class CrmOpportunityEntity
     {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string AccountName { get; set; }
+
+        public string SystemConstruction { get; set; }
+
+        public string Note { get; set; }
+
+        public Status ProjectBudget { get; set; }
+
+        public Status ApproveProject {  get; set; }
+
+        public CommunicationType CommunicationType { get; set; }        
+
+        public string CurrentSituation { get; set; }
+
+        public string CustomerNeed {  get; set; }
+
+        public string ProposedSolution { get; set; }
     }
 }

@@ -26,24 +26,24 @@ namespace DealGeinieCrmService.Services
         /// <returns></returns>
         public override bool CreateAnnotation(Guid _guid)
         {
-            var annotation = (CrmTxtAnnotationEntity) crmEntity;
-            var note = annotation.GetEntity();
+            //var annotation = (CrmTxtAnnotationEntity) crmEntity;
+            //var note = annotation.GetEntity();
 
-            try
-            {
-                note["objectid"] = _guid;
-                note["objecttypecode"] = annotation.ObjectTypeCode;
-                note["subject"] = annotation.Subject;
-                note["notetext"] = annotation.NoteText;
+            //try
+            //{
+            //    note["objectid"] = _guid;
+            //    note["objecttypecode"] = annotation.ObjectTypeCode;
+            //    note["subject"] = annotation.Subject;
+            //    note["notetext"] = annotation.NoteText;
 
-                Guid noteId = organizationServiceProxy.Create(note);
-            }
-            catch (Exception ex)
-            {
-                var errorMsg = ex.Message;
+            //    Guid noteId = organizationServiceProxy.Create(note);
+            //}
+            //catch (Exception ex)
+            //{
+            //    var errorMsg = ex.Message;
 
-                return false;
-            }
+            //    return false;
+            //}
 
             return true;
         }

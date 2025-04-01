@@ -56,10 +56,7 @@ namespace DealGeinieCrmService.Authentications
 
         public void InitializeCredentials()
         {
-            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            var clientCredentials = new ClientCredentials
+            ClientCredentials clientCredentials = new ClientCredentials()
             {
                 UserName =
                 {
@@ -67,6 +64,11 @@ namespace DealGeinieCrmService.Authentications
                     Password = _password
                 }
             };
+            
+
+            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
 
             OrganizationServiceProxy = new OrganizationServiceProxy(new Uri(_uri), null, clientCredentials, null);
         }

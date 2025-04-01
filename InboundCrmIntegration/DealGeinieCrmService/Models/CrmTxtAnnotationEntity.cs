@@ -7,7 +7,7 @@ namespace DealGeinieCrmService.Models
     /// Represents a CRM annotation entity.
     /// Willie Yao - 02/21/2025
     /// </summary>
-    public class CrmTxtAnnotationEntity : ICrmEntity
+    public class CrmTxtAnnotationEntity
     {
         public static string EntityType = "annotation";
 
