@@ -323,6 +323,7 @@
     <Compile Include="Authentications\CrmDevCredential.cs" />
     <Compile Include="Authentications\ICrmCredential.cs" />
     <Compile Include="Authentications\TestAccountCredential.cs" />
+    <Compile Include="Base\CommunicationType.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CrmAccountController.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Models\CrmOpportunityEntity.cs" />
     <Compile Include="Models\CrmTxtAnnotationEntity.cs" />
     <Compile Include="Models\ICrmEntity.cs" />
+    <Compile Include="Models\Response.cs" />
     <Compile Include="Modules\ServiceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\CrmAccountService.cs" />
@@ -349,6 +351,7 @@
     <Compile Include="Service\CrmTxtAnnotationService.cs" />
     <Compile Include="Service\ICrmService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Base\Status.cs" />
     <Compile Include="Utilities\JwtManager.cs" />
   </ItemGroup>
   <ItemGroup>
