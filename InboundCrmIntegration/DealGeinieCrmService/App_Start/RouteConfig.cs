@@ -18,6 +18,12 @@ namespace DealGeinieCrmService
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            //routes.MapRoute(
+            //    name: "Account",
+            //    url: "Account/{action}",
+            //    defaults: new { controller = "Account", action = "Login" }
+            //);
         }
     }
 }

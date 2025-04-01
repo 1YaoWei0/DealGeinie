@@ -26,5 +26,11 @@ namespace DealGeinieCrmService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
         }
+
+        [HttpGet]
+        public HttpResponseMessage GetCrmAccount()
+        {
+            return Request.CreateResponse(HttpStatusCode.Accepted);
+        }
     }
 }
