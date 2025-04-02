@@ -14,6 +14,12 @@ namespace DealGeinieCrmService.Controllers
     [RoutePrefix("api/opportunities")]
     public class CrmOpportunityController : ApiController
     {
+        /// <summary>
+        /// Update opportunity data
+        /// Willie Yao - 04/02/2025
+        /// </summary>
+        /// <param name="_crmOpportunityEntity">CrmOpportunityEntity</param>
+        /// <returns>IHttpActionResult</returns>
         [Route("{id}")]
         [HttpPost]
         public IHttpActionResult UpdateOpportunityData([FromBody] CrmOpportunityEntity _crmOpportunityEntity)
