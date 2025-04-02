@@ -1,0 +1,2 @@
+CREATE DATABASE DealGenieDB
+COLLATE Chinese_PRC_CI_AS; -- 中文排序规则
