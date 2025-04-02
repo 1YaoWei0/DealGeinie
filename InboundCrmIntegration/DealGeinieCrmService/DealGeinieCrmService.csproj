@@ -323,7 +323,9 @@
     <Compile Include="Authentications\CrmDevCredential.cs" />
     <Compile Include="Authentications\ICrmCredential.cs" />
     <Compile Include="Authentications\TestAccountCredential.cs" />
+    <Compile Include="Base\AnnotationType.cs" />
     <Compile Include="Base\CommunicationType.cs" />
+    <Compile Include="Base\MimeType.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CrmAccountController.cs" />
@@ -339,8 +341,9 @@
     </Compile>
     <Compile Include="Models\ApiResponse.cs" />
     <Compile Include="Models\CrmAccountEntity.cs" />
+    <Compile Include="Models\CrmAnnotationEntityBase.cs" />
     <Compile Include="Models\CrmOpportunityEntity.cs" />
-    <Compile Include="Models\CrmTxtAnnotationEntity.cs" />
+    <Compile Include="Models\CrmAnnotationEntity.cs" />
     <Compile Include="Models\ICrmEntity.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Modules\ServiceModule.cs" />

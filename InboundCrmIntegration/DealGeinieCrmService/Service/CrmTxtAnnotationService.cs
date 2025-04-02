@@ -1,6 +1,10 @@
 ﻿using DealGeinieCrmService.Authentications;
+using DealGeinieCrmService.Base;
 using DealGeinieCrmService.Models;
+using Microsoft.Xrm.Sdk;
 using System;
+using System.IO;
+using System.Web.Services.Description;
 
 namespace DealGeinieCrmService.Services
 {
@@ -8,55 +12,40 @@ namespace DealGeinieCrmService.Services
     /// This class is responsible for creating a new txt annotation in CRM.
     /// Willie Yao - 02/21/2025
     /// </summary>
-    public class CrmTxtAnnotationService : CrmAnnotationService
+    public class CrmTxtAnnotationService
     {
-        /// <summary>
-        /// Default constructor.
-        /// Willie Yao - 02/21/2025
-        /// </summary>
-        /// <param name="_crmCredential">CrmDevCredential</param>
-        public CrmTxtAnnotationService() : base()
-        {
-        }
-
         /// <summary>
         /// Create a new annotation in CRM.
         /// Willie Yao - 02/21/2025
         /// </summary>
         /// <returns></returns>
-        public override bool CreateAnnotation(Guid _guid)
+        public Entity ConstructAnnotation(
+            Guid guid, 
+            string entityName,
+            CrmAnnotationEntity txtEntity)
         {
-            //var annotation = (CrmTxtAnnotationEntity) crmEntity;
-            //var note = annotation.GetEntity();
+            var note = txtEntity.GetEntity();
 
-            //try
-            //{
-            //    note["objectid"] = _guid;
-            //    note["objecttypecode"] = annotation.ObjectTypeCode;
-            //    note["subject"] = annotation.Subject;
-            //    note["notetext"] = annotation.NoteText;
-
-            //    Guid noteId = organizationServiceProxy.Create(note);
-            //}
-            //catch (Exception ex)
-            //{
-            //    var errorMsg = ex.Message;
-
-            //    return false;
-            //}
-
-            return true;
-        }
-
-        public override bool GetOriganizationServiceProxy()
-        {
-            var crmDevCredential = (CrmDevCredential) crmCredential;
-            if (crmDevCredential == null)
+            try
             {
-                return false;
+                note["objectid"] = new EntityReference(entityName, guid);
+                note["subject"] = txtEntity.Subject;
+                note["notetext"] = txtEntity.NoteText;
+                note["isdocument"] = txtEntity.IsDocument;
+
+                if (txtEntity.IsDocument)
+                {
+                    note["filename"] = txtEntity.FileName;
+                    note["documentbody"] = txtEntity.DocumentBody;
+                    note["mimetype"] = MimeTypeHelper.GetMimeString(txtEntity.MIMEtype);                   
+                }
             }
-            organizationServiceProxy = crmDevCredential.OrganizationServiceProxy;
-            return organizationServiceProxy != null;
+            catch (Exception ex)
+            {
+                var errorMsg = ex.Message;
+            }
+
+            return note;
         }
     }
 }

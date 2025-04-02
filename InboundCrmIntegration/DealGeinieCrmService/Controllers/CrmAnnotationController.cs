@@ -22,7 +22,7 @@ namespace DealGeinieCrmService.Controllers
 
         [Route("{id}")]
         [HttpPost]
-        public HttpResponseMessage CreateTxtAnnotation(CrmTxtAnnotationEntity _crmTxtAnnotationEntity)
+        public HttpResponseMessage CreateTxtAnnotation(CrmAnnotationEntity _crmTxtAnnotationEntity)
         {
             var crmTxtAnnotationService = (CrmTxtAnnotationService) CrmService;
 
