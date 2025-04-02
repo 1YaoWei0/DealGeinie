@@ -331,6 +331,7 @@
     <Compile Include="Controllers\CrmAccountController.cs" />
     <Compile Include="Controllers\CrmAnnotationController.cs" />
     <Compile Include="Controllers\CrmOpportunityController.cs" />
+    <Compile Include="Controllers\EnterpriseInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProtectedController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Models\CrmAnnotationEntityBase.cs" />
     <Compile Include="Models\CrmOpportunityEntity.cs" />
     <Compile Include="Models\CrmAnnotationEntity.cs" />
+    <Compile Include="Models\EnterpriseInfo.cs" />
     <Compile Include="Models\ICrmEntity.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Modules\ServiceModule.cs" />
