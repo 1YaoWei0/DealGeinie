@@ -33,8 +33,7 @@ namespace DealGeinieCrmService.Controllers
             return Ok(crmOpportunityService.UpdateOpportunityEntity(organizationServiceProxy, _crmOpportunityEntity));
         }
 
-        [Route("{id}")]
-        [HttpGet]
+        
         public IHttpActionResult QueryOpportunityData(string name)
         {
             CrmOpportunityService crmOpportunityService = new CrmOpportunityService();
